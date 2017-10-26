@@ -1,5 +1,6 @@
 #python 2.7
 #topMovies.py - retrieves 15 top rated Movies/Shows/AnimatedMovies of a certain year from the site kinozal.tv
+
 import bs4,requests, movieClass, time, re, random,logging
 
 
@@ -10,23 +11,11 @@ def handleMovie(movieElement):
             #download movie page
             res=requests.get('http://kinozal.tv'+str(movieElement.find('a').get('href')))
             res.raise_for_status()
+            break
         except requests.exceptions.ConnectionError as exc:
-            print exc
-            print exc.errno #testing
-            print 'shit'
-            checkErr=re.compile(r'Errno (\d+)') #regex to find error code
-            mo=checkErr.search(str(exc))
-            if mo != None:
-                print mo.group()
-                if 'Errno 10060' == mo.group(): #retry connection because got no response
-                    index-=1
-                    logging.warning('no response from server(Errno 10060). Retrying...')
-                elif 'Errno 10061' == mo.group(): #target machine activly refused
-                    logging.warning('Target machine refused(Errno 10061). Retrying in 30 seconds')
-                    time.sleep(30)
-            else:
-                logging.critical('Unknown error:',str(exc))
-                quit()
+            logging.info('Connection Error, retrying in 30 seconds')
+            time.sleep(30)
+
     soup=bs4.BeautifulSoup(res.text)
     #retrieve movie propeties from page
     #save movie name
@@ -89,55 +78,46 @@ def getMovies(MSA,year,numOfMovies):
     setupLogging()
     movies=[]
     index=0
-    exception=''
     while (True):
         #download all movies page
-        try:
-            url='http://kinozal.tv/browse.php?c=100'+str(MSA)+'&v=1&d='+str(year)+'&t=4&page='+str(index)
-            res=requests.get(url)
-            res.raise_for_status()
-            logging.debug('downloaded page')
-            pageSoup=bs4.BeautifulSoup(res.text)
-            logging.debug('created BeautifulSoup object')
-            #get movies and add if movie is not already in list
-            moviesElms=pageSoup.select('.nam')
-            for i in range(len(moviesElms)):
-                movie=handleMovie(moviesElms[i])
-                logging.debug('got movie object')
-                if movie not in movies:
-                    movies=insertMovie(movies,movie)
-                    logging.debug('inserted movie')
-            #check if there is a next page
+        while (True): #loop until page downloaded
+            try:
+                url='http://kinozal.tv/browse.php?c=100'+str(MSA)+'&v=1&d='+str(year)+'&t=4&page='+str(index)
+                res=requests.get(url)
+                res.raise_for_status()
+                logging.debug('downloaded page')
+                pageSoup=bs4.BeautifulSoup(res.text)
+                logging.debug('created BeautifulSoup object')
+                #get movies and add if movie is not already in list
+                #mydivs = soup.findAll("div", { "class" : "stylelistrow" })
+                moviesElms=pageSoup.findAll("td", { "class" : "nam" })
+                print len(moviesElms)
+                for i in moviesElms:
+                    movie=handleMovie(i)
+                    logging.debug('got movie object')
+                    if movie not in movies:
+                        movies=insertMovie(movies,movie)
+                        logging.debug('inserted movie')
+                        print 'inserted movie'
+                break
 
 
-
-        except exception as exc:
-            checkErr=re.compile(r'Errno (\d+)') #regex to find error code
-            mo=checkErr.search(str(exc))
-            if mo != None:
-                print mo.group()
-                if 'Errno 10060' == mo.group(0): #retry connection because got no response
-                    logging.warning('no response from server(Errno 10060). Retrying...')
-
-                elif 'Errno 10061' == mo.group(): #target machine activly refused
-                    logging.warning('Target machine refused(Errno 10061). Retrying in 30 seconds')
-                    time.sleep(30)
-
-            else:
-                logging.critical('Unknown error:',str(exc))
+            except requests.exceptions.ConnectionError as exc:
+                logging.info('Connection Error, retrying in 30 seconds')
+                time.sleep(30)
+        #check if there is a next page
         nextPageElm=pageSoup.find('a',rel="next")
-
         if nextPageElm==None: #if no next page break loop
             break
         index+=1
     print str(len(movies))
-    for i in range(numOfMovies):
-        pass
-        #print movies[i].getName()
+    for i in range(min(numOfMovies,len(movies))):
+        #pass
+        print unicode(movies[i].getName())
 
     #return number of movies chosen
     logging.info('Movies returned')
-    return movies[:numOfMovies]
+    return movies[:min(numOfMovies,len(movies))]
 
 
 if __name__=='__main__':

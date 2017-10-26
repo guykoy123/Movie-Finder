@@ -2,78 +2,93 @@
 #MovieFinder.py - GUI for top movies finder
 
 from Tkinter import *
-import logging, topMovies,time,threading
-import unicodedata as ud
+import tkMessageBox
+import logging, topMovies,threading
+from time import strftime
+import codecs
+
 
 global searching
 searching=False
+UTF8Writer=codecs.getwriter('utf8')
 
 def printReasults(Movies):
     searching=False
     logging.debug('printing results')
+    #TODO: implement this function properly
     for i in Movies:
-        print ud.name(i.getName())
+        print UTF8Writer(i.getName())
 
 def checkRequest(year,amount):
     try:
+        if year==None:
+            logging.warning('Year not entered')
+            tkMessageBox.showinfo('Missing Year','Please enter a year')
+            return False
+
         year=int(year)
-        if year<1900 or year>int(time.strftime('%Y')):
+        if year<1900 or year>int(strftime('%Y')):
             logging.warning('year value out of range')
-            #add message box !!!!!!!!!!!!!
+            tkMessageBox.showinfo('Year Invalid','Years must be between 1900 and {0}'.format(strftime('%Y')))
             return False
 
     except ValueError:
         logging.warning('year value not a number')
-        #add message box !!!!!!!!!!!!
+        tkMessageBox.showinfo('Year Invalid','Year must be a number')
         return False
-    except exception as exc:
-        logging.critical('Unknown error:',str(exc))
-        #add message box !!!!!!!!
+
+    except Exception as exc:
+        logging.critical('Unknown error: '+str(exc))
+        tkMessageBox.showinfo('Unknown Error','Program has encountered an unknown error.\n (Please contact the developer(p.s it\'s Guy))')
         return False
 
     try:
+        if amount==None:
+            logging.warning('No amount entered')
+            tkMessageBox.showinfo('Missing amount','Please enter amount of movies to display')
         amount=int(amount)
         if amount<0 or amount>50:
             logging.warning('amount value out of range')
-            #add message box
+            tkMessageBox.showinfo('Invalid amount','Amount has to be between 1 and 50')
             return False
 
     except ValueError:
         logging.warning('amount value not a number')
-        #add message box
+        tkMessageBox.showinfo('Invalid amount','Amount has to be a number')
         return False
     except exception as exc:
-        logging.critical('Unknown error:',str(exc))
-        #add message box
+        logging.critical('Unknown error: '+str(exc))
+        tkMessageBox.showinfo('Unknown Error','Program has encountered an unknown error.\n (Please contact the developer(p.s it\'s Guy))')
         return False
 
     return True
 
 def getMovies():
-    """retrievs request details
-    checks them for potantial errors
-    retrieves request
     """
-    if checkRequest(movieYear.get(),moviesNum.get()):
-        logging.info('request details valid')
-        numOfMovies=int(moviesNum.get())
-    logging.debug('rerieving movies for year:%s ,type:%s'%(movieYear.get(),mediaType.get()))
-    printReasults(topMovies.getMovies(mediaType.get(),movieYear.get(),numOfMovies))
+    retrieve movies
+    """
+    numOfMovies=int(moviesNum.get())
+    logging.debug('rerieving movies for year:{0} ,type:{1}'.format(movieYear.get(),mediaType.get()))
+    printReasults(topMovies.getMovies(mediaType.get(),movieYear.get(),10))
+
+
 
 def startThread():
     global searching
-    if not searching:
-        searching=True
-        t=threading.Thread(target=getMovies)
-        t.start()
-    else:
-        pass
+    if checkRequest(movieYear.get(),moviesNum.get()):
+        if not searching:
+            logging.info('request details valid')
+            searching=True
+            t=threading.Thread(target=getMovies)
+            t.start()
+    logging.debug('request details not valid')
+
 
 
 def setupResultGUI(root):
     pass
     """ setup GUI for results window"""
-
+    # TODO: check this part
     #add listbox for movies and textbox for more information
     logging.debug('setting up Result window GUI')
     bottomFrame=Frame(root)
@@ -184,5 +199,5 @@ def main():
 
 if __name__=='__main__':
     #set up logging
-    logging.basicConfig(filename='guiLog.txt',level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(filename='guiLog.txt',level=logging.INFO, format='%(pathname)s : %(lineno)s - %(asctime)s - %(levelname)s - %(message)s')
     main()
