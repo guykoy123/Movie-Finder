@@ -75,6 +75,7 @@ def setupLogging():
     logging.basicConfig(filename='getMoviesLog.txt',level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
 
 def getMovies(MSA,year,numOfMovies):
+    logging.info('retrieving movies')
     setupLogging()
     movies=[]
     index=0
@@ -91,6 +92,7 @@ def getMovies(MSA,year,numOfMovies):
                 #get movies and add if movie is not already in list
                 #mydivs = soup.findAll("div", { "class" : "stylelistrow" })
                 moviesElms=pageSoup.findAll("td", { "class" : "nam" })
+                # TODO: handle case when no movies are avalible
                 print len(moviesElms)
                 for i in moviesElms:
                     movie=handleMovie(i)
@@ -111,9 +113,7 @@ def getMovies(MSA,year,numOfMovies):
             break
         index+=1
     print str(len(movies))
-    for i in range(min(numOfMovies,len(movies))):
-        #pass
-        print unicode(movies[i].getName())
+
 
     #return number of movies chosen
     logging.info('Movies returned')

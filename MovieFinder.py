@@ -5,19 +5,19 @@ from Tkinter import *
 import tkMessageBox
 import logging, topMovies,threading
 from time import strftime
-import codecs
+
 
 
 global searching
 searching=False
-UTF8Writer=codecs.getwriter('utf8')
+
 
 def printReasults(Movies):
     searching=False
     logging.debug('printing results')
     #TODO: implement this function properly
     for i in Movies:
-        print UTF8Writer(i.getName())
+        print i.getName().encode('utf-8')
 
 def checkRequest(year,amount):
     try:

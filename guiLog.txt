@@ -1,0 +1,73 @@
+MovieFinder.py : 186 - 2017-10-26 18:07:18,736 - INFO - 
+
+
+
+
+
+
+
+
+
+
+ ##########program start##########
+MovieFinder.py : 190 - 2017-10-26 18:07:18,796 - INFO - main GUI setup finished
+MovieFinder.py : 76 - 2017-10-26 18:07:23,624 - INFO - request details valid
+MovieFinder.py : 190 - 2017-10-26 18:14:37,861 - INFO - 
+
+
+
+
+
+
+
+
+
+
+ ##########program start##########
+MovieFinder.py : 194 - 2017-10-26 18:14:37,921 - INFO - main GUI setup finished
+MovieFinder.py : 80 - 2017-10-26 18:14:42,711 - INFO - request details valid
+MovieFinder.py : 190 - 2017-10-27 18:58:46,823 - INFO - 
+
+
+
+
+
+
+
+
+
+
+ ##########program start##########
+MovieFinder.py : 194 - 2017-10-27 18:58:46,924 - INFO - main GUI setup finished
+MovieFinder.py : 80 - 2017-10-27 18:58:57,490 - INFO - request details valid
+D:\USER FILES\Desktop\Python\Projects\Movie Finder\topMovies.py : 119 - 2017-10-27 18:58:58,088 - INFO - Movies returned
+MovieFinder.py : 190 - 2017-10-27 18:59:30,118 - INFO - 
+
+
+
+
+
+
+
+
+
+
+ ##########program start##########
+MovieFinder.py : 194 - 2017-10-27 18:59:30,181 - INFO - main GUI setup finished
+MovieFinder.py : 80 - 2017-10-27 18:59:35,256 - INFO - request details valid
+MovieFinder.py : 190 - 2017-10-27 19:06:41,269 - INFO - 
+
+
+
+
+
+
+
+
+
+
+ ##########program start##########
+MovieFinder.py : 194 - 2017-10-27 19:06:41,329 - INFO - main GUI setup finished
+MovieFinder.py : 80 - 2017-10-27 19:06:45,977 - INFO - request details valid
+D:\USER FILES\Desktop\Python\Projects\Movie Finder\topMovies.py : 78 - 2017-10-27 19:06:45,979 - INFO - retrieving movies
+D:\USER FILES\Desktop\Python\Projects\Movie Finder\topMovies.py : 121 - 2017-10-27 19:10:04,793 - INFO - Movies returned
