@@ -67,7 +67,7 @@ def insertMovie(movies,movie):
                         movies.append(movie)
                         break
     logging.debug('movie added')
-    print 'added movie'
+    print ('added movie')
     return movies
 
 
@@ -93,14 +93,14 @@ def getMovies(MSA,year,numOfMovies):
                 #mydivs = soup.findAll("div", { "class" : "stylelistrow" })
                 moviesElms=pageSoup.findAll("td", { "class" : "nam" })
                 # TODO: handle case when no movies are avalible
-                print len(moviesElms)
+                print (len(moviesElms))
                 for i in moviesElms:
                     movie=handleMovie(i)
                     logging.debug('got movie object')
                     if movie not in movies:
                         movies=insertMovie(movies,movie)
                         logging.debug('inserted movie')
-                        print 'inserted movie'
+                        print ('inserted movie')
                 break
 
 
@@ -112,7 +112,7 @@ def getMovies(MSA,year,numOfMovies):
         if nextPageElm==None: #if no next page break loop
             break
         index+=1
-    print str(len(movies))
+    print (str(len(movies)))
 
 
     #return number of movies chosen

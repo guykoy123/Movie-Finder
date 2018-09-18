@@ -1,8 +1,7 @@
-#python 2.7
+#python 3.7
 #MovieFinder.py - GUI for top movies finder
 
-from Tkinter import *
-import tkMessageBox
+from tkinter import *
 import logging, topMovies,threading
 from time import strftime
 
@@ -17,48 +16,48 @@ def printReasults(Movies):
     logging.debug('printing results')
     #TODO: implement this function properly
     for i in Movies:
-        print i.getName().encode('utf-8')
+        print (i.getName().encode('utf-8'))
 
 def checkRequest(year,amount):
     try:
         if year==None:
             logging.warning('Year not entered')
-            tkMessageBox.showinfo('Missing Year','Please enter a year')
+            messagebox.showinfo('Missing Year','Please enter a year')
             return False
 
         year=int(year)
         if year<1900 or year>int(strftime('%Y')):
             logging.warning('year value out of range')
-            tkMessageBox.showinfo('Year Invalid','Years must be between 1900 and {0}'.format(strftime('%Y')))
+            messagebox.showinfo('Year Invalid','Years must be between 1900 and {0}'.format(strftime('%Y')))
             return False
 
     except ValueError:
         logging.warning('year value not a number')
-        tkMessageBox.showinfo('Year Invalid','Year must be a number')
+        messagebox.showinfo('Year Invalid','Year must be a number')
         return False
 
     except Exception as exc:
         logging.critical('Unknown error: '+str(exc))
-        tkMessageBox.showinfo('Unknown Error','Program has encountered an unknown error.\n (Please contact the developer(p.s it\'s Guy))')
+        messagebox.showinfo('Unknown Error','Program has encountered an unknown error.\n (Please contact the developer(p.s it\'s Guy))')
         return False
 
     try:
         if amount==None:
             logging.warning('No amount entered')
-            tkMessageBox.showinfo('Missing amount','Please enter amount of movies to display')
+            messagebox.showinfo('Missing amount','Please enter amount of movies to display')
         amount=int(amount)
         if amount<0 or amount>50:
             logging.warning('amount value out of range')
-            tkMessageBox.showinfo('Invalid amount','Amount has to be between 1 and 50')
+            messagebox.showinfo('Invalid amount','Amount has to be between 1 and 50')
             return False
 
     except ValueError:
         logging.warning('amount value not a number')
-        tkMessageBox.showinfo('Invalid amount','Amount has to be a number')
+        messagebox.showinfo('Invalid amount','Amount has to be a number')
         return False
     except exception as exc:
         logging.critical('Unknown error: '+str(exc))
-        tkMessageBox.showinfo('Unknown Error','Program has encountered an unknown error.\n (Please contact the developer(p.s it\'s Guy))')
+        messagebox.showinfo('Unknown Error','Program has encountered an unknown error.\n (Please contact the developer(p.s it\'s Guy))')
         return False
 
     return True
