@@ -1,0 +1,8 @@
+#ignore test file
+shit.py
+
+#ingnore .pyc files
+*pyc
+
+#ignore log files
+*.log
