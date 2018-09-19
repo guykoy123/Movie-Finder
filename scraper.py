@@ -5,7 +5,7 @@ from Media_Class import *
 
 
 def Insert_Media(media_obj,media_list):
-    if media_list==None:
+    if len(media_list)==0:
         media_list.append(media_obj)
         return media_list
 
@@ -14,9 +14,27 @@ def Insert_Media(media_obj,media_list):
         if i.get_name()==media_obj.get_name(): #if the name already appears
             return media_list #return the list unchanged
 
+    """if len(media_list)==1:
+        if media_list[0].get_rating()<media_obj.get_rating():
+            media_list.insert(0,media_obj)
+            return media_list
+        else:
+            media_list.append(media_obj)
+            return media_list"""
+
+
     #add media_obj to correct place based on rating
 
     #TODO: implement optimized insertion !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    added=False
+    for i in range(len(media_list)):
+        if media_list[i].get_rating()<media_obj.get_rating():
+            media_list.insert(i,media_obj)
+            added=True
+            break
+
+    if not added:
+        media_list.append(media_obj)
 
     return media_list
 
@@ -34,8 +52,8 @@ def get_rating_votes(link):
             print('connection error, retrying...')
             time.sleep(5)
 
-    rating=page_soup.find("span",{"itemprop":"ratingValue"}).text
-    votes=page_soup.find("span",{"itemprop":"votes"}).text
+    rating=float(page_soup.find("span",{"itemprop":"ratingValue"}).text)
+    votes=float(page_soup.find("span",{"itemprop":"votes"}).text)
 
     return rating,votes
 
@@ -68,16 +86,16 @@ def main(media_type,year,amount):
             objects_elm=page_soup.findAll("td",{"class":"nam"}) #find all the media objects on the page
             for i in objects_elm:
                 print("next")
-                Media_list=Insert_Media(Handle_Object(i),Media_list) #for each piece of media create a Media object and insert into the existing list based on the rating and
-                for a in Media_list:
-                    print(a.get_rating())
-
-            break #remove later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                try:
+                    Media_list=Insert_Media(Handle_Object(i),Media_list) #for each piece of media create a Media object and insert into the existing list based on the rating and
+                except AttributeError:
+                    pass
 
             next_page_element=page_soup.find('a',rel="next")
             if next_page_element==None:
                 break
             print('\n\n next page \n\n')
+            print(len(Media_list))
             url=base_url+next_page_element['href']
         except requests.exceptions.ConnectionError:
             print('connection error, retrying...')
